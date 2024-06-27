@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "359413648306",
+    "project_id": "task-manager-acd0a",
+    "storage_bucket": "task-manager-acd0a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:359413648306:android:540ed511967839ed40b2ab",
+        "android_client_info": {
+          "package_name": "com.example.devoida_task_manager"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC2Gy3f3uEpL8iT-Ac70QUxPC2o1FGLX2Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
