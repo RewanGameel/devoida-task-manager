@@ -73,9 +73,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   Icons.add,
                   color: ColorManager.primary,
                 ),
-                onPressed: () {
-                  Navigator.pushNamed(context, Routes.createNewProjectRoute);
-                },
+                onPressed: () async{
+                 var result = await Navigator.pushNamed(context, Routes.createNewProjectRoute);
+                if(result == true){
+                  _viewModel.getProjects();
+                }
+                 },
               ),
               body: Padding(
                 padding: getPadding(horizontal: AppPadding.p24, vertical: AppPadding.p16),
@@ -138,6 +141,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             )
                           else
                             ...buildProjectsSection(),
+                           const SizedBox(
+                                  height: AppPadding.p50,)
                         ],
                       ),
                     ],
@@ -221,12 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                       projectsList[index].createdAt.toString().toFormattedDateYear(),
-                        // projectsList[index].createdAt.toString().toFormattedDateYear(),
-                        style: getHintStyle(color: ColorManager.contrastLight),
-                      ),  Text(
-                       projectsList[index].id,
-                        // projectsList[index].createdAt.toString().toFormattedDateYear(),
+                       projectsList[index].deadlineDate.toString().toFormattedDateYear(),
                         style: getHintStyle(color: ColorManager.contrastLight),
                       ),
                       Text(
@@ -248,7 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               decoration: BoxDecoration(borderRadius: BorderRadius.circular(AppSize.s16), border: Border.all(color: ColorManager.white)),
                               padding: getPadding(horizontal: AppPadding.p8, vertical: AppPadding.p4),
                               child: Text(
-                                "74 Tasks",
+                                "${DateTime.parse(projectsList[index].deadlineDate).difference(DateTime.now()).inDays} Days Left",
                                 style: getRegularStyle(fontSize: FontSize.s14),
                               )),
                           const SizedBox(

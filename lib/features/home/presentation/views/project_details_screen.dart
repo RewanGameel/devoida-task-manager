@@ -36,8 +36,14 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
   late HomeCubit _viewModel;
 
   bool _isLoading = true;
-
   List<TaskEntity>? _projectTasks;
+  int _deadlineDaysLeft=0;
+  void calculateDeadline() {
+    _deadlineDaysLeft = Duration(seconds: DateTime.parse(widget.projectEntity.deadlineDate).difference(DateTime.now()).inSeconds).inDays;
+    if (_deadlineDaysLeft < 0) {
+      _deadlineDaysLeft = 0;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +51,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
       create: (context) {
         _viewModel = HomeCubit();
         _viewModel.getProjectTasks(widget.projectEntity.id);
+        calculateDeadline();
         return _viewModel;
       },
       child: BlocConsumer<HomeCubit, HomeState>(
@@ -55,7 +62,6 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
           if (state is DeleteProjectSuccessState) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.baseResponseEntity.message)));
             dismissDialog(context);
-
             Navigator.pop(context);
           }
           if (state is DeleteProjectErrorState) {
@@ -67,13 +73,12 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
           }
           if (state is AddTaskSuccessState) {
             _isLoading = false;
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.baseResponseEntity.message)));
-            //TODO SHOULD CALL THE GET TASKS BY PROJECT ID SERVICE
-            //update UI
           }
           if (state is AddTaskErrorState) {
             _isLoading = false;
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.failure.message)));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                behavior: SnackBarBehavior.fixed,
+                content: Text(state.failure.message)));
           }
           if (state is GetProjectTasksLoadingState) {
             _isLoading = true;
@@ -153,7 +158,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                               style: getHintStyle(),
                             ),
                             Text(
-                              "59 Days",
+                              "${_deadlineDaysLeft} Days",
                               style: getRegularStyle(),
                             ),
                           ],
@@ -237,7 +242,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                       vertical: AppPadding.p8,
                     ),
                     decoration: BoxDecoration(
-                      color: ColorManager.contrastLight,
+                      color: _projectTasks?[index].isDone ?? false ? ColorManager.success : ColorManager.textHeaderColor,
                       borderRadius: BorderRadius.circular(AppSize.s8),
                     ),
                     child: Row(
@@ -247,15 +252,14 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                // "Lorem Ibsim dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                                 _projectTasks![index].description,
-                                style: getHintStyle(color: ColorManager.textHeaderColor),
+                                style: getHintStyle(color: _projectTasks?[index].isDone ?? false ? ColorManager.textHeaderColor : ColorManager.white).copyWith(decoration:_projectTasks![index].isDone ? TextDecoration.lineThrough : null),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
                               Text(
                                 _projectTasks![index].name,
-                                style: getMediumStyle(fontSize: FontSize.s20, color: ColorManager.textHeaderColor),
+                                style: getMediumStyle(fontSize: FontSize.s20,color:_projectTasks?[index].isDone ?? false ? ColorManager.textHeaderColor : ColorManager.white).copyWith(decoration:_projectTasks![index].isDone ? TextDecoration.lineThrough : null),
                               ),
                             ],
                           ),
@@ -264,11 +268,15 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                           width: AppSize.s16,
                         ),
                         InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(
+                          onTap: () async{
+                           var result = await  Navigator.pushNamed(
                               context,
-                              Routes.homeRoute,
+                              Routes.taskDetailsRoute,
+                              arguments: {'taskEntity': _projectTasks![index]},
                             );
+                           if(result == true){
+                             _viewModel.getProjectTasks(widget.projectEntity.id,);
+                           }
                           },
                           child: Container(
                               decoration: BoxDecoration(

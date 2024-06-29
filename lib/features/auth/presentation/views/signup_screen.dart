@@ -121,10 +121,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                               CustomButton(
                                   onPress: () {
-                                     Navigator.popAndPushNamed(context, Routes.homeRoute);
-                                    // if (_formKey.currentState?.validate() == true) {
-                                    //   _authCubit.createUserWithEmailAndPassword(email: _emailController.text, password: _passwordController.text, userName: _nameController.text);
-                                    // }
+                                     // Navigator.popAndPushNamed(context, Routes.homeRoute);
+                                    if (_formKey.currentState?.validate() == true) {
+                                      _authCubit.createUserWithEmailAndPassword(email: _emailController.text, password: _passwordController.text, userName: _nameController.text);
+                                    }
                                   },
                                   labelText: "Signup"),
                               TextButton(

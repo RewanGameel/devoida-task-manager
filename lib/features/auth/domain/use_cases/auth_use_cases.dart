@@ -15,7 +15,7 @@ class AuthUseCases {
   Future<Either<Failure, User>> createUserWithEmailAndPassword({required String email, required String password, required String userName}) async {
     try {
       final UserCredential createdUser = await _auth.createUserWithEmailAndPassword(email: email, password: password);
-       // Store user details in Firestore
+       // Store user details in Firestore users table
     await _fireStoreDB.collection(Constants.USERS_COLLECTION_KEY).doc(createdUser.user?.uid).set({
       'uid': createdUser.user?.uid,
       'email': email,

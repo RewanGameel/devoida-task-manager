@@ -60,7 +60,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
           automaticallyImplyLeading: widget.canGoBack ?? true,
           toolbarHeight: widget.height,
           flexibleSpace: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: ColorManager.backgroundDark,
             ),
           ),

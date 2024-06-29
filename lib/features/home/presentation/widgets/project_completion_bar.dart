@@ -13,7 +13,7 @@ class ProjectCompletionBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //must make sure tasks are > 0
-    final ratio = tasks.where((task) => task.isDone).length / (tasks.length > 0 ? tasks.length : 1);
+    final ratio = tasks.where((task) => task.isDone).length / (tasks.isNotEmpty ? tasks.length : 1);
     return  Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

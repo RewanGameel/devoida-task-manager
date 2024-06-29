@@ -1,6 +1,7 @@
 import 'package:devoida_task_manager/features/auth/presentation/views/login_screen.dart';
 import 'package:devoida_task_manager/features/auth/presentation/views/onboarding_screen.dart';
 import 'package:devoida_task_manager/features/auth/presentation/views/signup_screen.dart';
+import 'package:devoida_task_manager/features/home/domain/entities/task_entity.dart';
 import 'package:devoida_task_manager/features/home/presentation/view_model/home_cubit.dart';
 import 'package:devoida_task_manager/features/home/presentation/views/home_screen.dart';
 
@@ -8,6 +9,7 @@ import '../../features/home/domain/entities/project_entity.dart';
 import '../../features/home/presentation/views/create_new_project_screen.dart';
 import '../../features/home/presentation/views/create_new_task_screen.dart';
 import '../../features/home/presentation/views/project_details_screen.dart';
+import '../../features/home/presentation/views/task_details_screen.dart';
 import '../../features/splash/splash_view.dart';
 import 'strings_manager.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +23,7 @@ class Routes {
   static const String createNewProjectRoute = '/createNewProjectRoute';
   static const String projectDetailsRoute = '/projectDetailsRoute';
   static const String createNewTaskRoute = '/createNewTaskRoute';
+  static const String taskDetailsRoute = '/taskDetailsRoute';
 }
 
 class RouteGenerator {
@@ -43,6 +46,14 @@ class RouteGenerator {
 
       case Routes.createNewProjectRoute:
         return MaterialPageRoute(builder: (_) => CreateNewProjectScreen());
+        
+      case Routes.taskDetailsRoute:
+         var arguments = settings.arguments != null ? settings.arguments as Map : null;
+        TaskEntity? taskEntity;
+        if (arguments != null) {
+          taskEntity = arguments['taskEntity'];
+        }
+        return MaterialPageRoute(builder: (_) => TaskDetailsScreen(taskEntity:taskEntity!));
 
       case Routes.projectDetailsRoute:
         var arguments = settings.arguments != null ? settings.arguments as Map : null;

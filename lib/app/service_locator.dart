@@ -57,5 +57,11 @@ initHomeModule() {
   }   
    if (!GetIt.I.isRegistered<GetProjectTaskUseCases>()) {
     locator.registerFactory<GetProjectTaskUseCases>(() => GetProjectTaskUseCases());
+  }   
+   if (!GetIt.I.isRegistered<DeleteTaskUseCase>()) {
+    locator.registerFactory<DeleteTaskUseCase>(() => DeleteTaskUseCase());
+  }   
+   if (!GetIt.I.isRegistered<MarkTaskAsDoneUseCase>()) {
+    locator.registerFactory<MarkTaskAsDoneUseCase>(() => MarkTaskAsDoneUseCase());
   }
 }

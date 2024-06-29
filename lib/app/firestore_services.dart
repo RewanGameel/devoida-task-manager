@@ -32,6 +32,16 @@ class DatabaseServices {
          Future<List<DocumentSnapshot>> getProjectTasksFromFireStoreDB (String projectId) async {
          final querySnapshot = await _fireStoreDB.collection(Constants.TASKS_COLLECTION_KEY).where('projectId', isEqualTo: projectId).get(); 
        return querySnapshot.docs;
+    }         
+    
+    Future<void> deleteTaskFromFireStoreDB (String taskId) async {
+          await _fireStoreDB.collection(Constants.TASKS_COLLECTION_KEY).doc(taskId).delete();
+    }
+    
+        Future<void> markTaskAsCompletedInFireStoreDB (String taskId) async {
+          await _fireStoreDB.collection(Constants.TASKS_COLLECTION_KEY).doc(taskId).update({
+            'isDone': true
+          });
     }
     
 }

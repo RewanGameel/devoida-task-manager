@@ -20,6 +20,8 @@ class HomeCubit extends Cubit<HomeState> {
   final DeleteProjectUseCase _deleteProjectUseCase = locator<DeleteProjectUseCase>();
   final CreateTaskUseCase _createTaskUseCase = locator<CreateTaskUseCase>();
   final GetProjectTaskUseCases _getProjectTaskUseCases = locator<GetProjectTaskUseCases>();
+  final DeleteTaskUseCase _deleteTaskUseCase = locator<DeleteTaskUseCase>();
+  final MarkTaskAsDoneUseCase _markTaskAsDoneUseCase = locator<MarkTaskAsDoneUseCase>();
 
   Future<void> getProjects() async {
         emit(GetProjectsLoadingState());
@@ -64,6 +66,7 @@ class HomeCubit extends Cubit<HomeState> {
       return {emit(GetProjectTasksSuccessState(projectTasksEntity: tasks))};
     });
   }
+  
   Future<void> deleteProject(String projectId) async {
         emit(DeleteProjectLoadingState());
     (await _deleteProjectUseCase.execute(projectId))
@@ -72,6 +75,28 @@ class HomeCubit extends Cubit<HomeState> {
       emit(DeleteProjectErrorState(failure));
     }, (response) {
       return {emit(DeleteProjectSuccessState(baseResponseEntity: response))};
+    });
+  }
+  
+  Future<void> deleteTask(String taskId) async {
+        emit(DeleteTaskLoadingState());
+    (await _deleteTaskUseCase.execute(taskId))
+        .fold((failure) {
+      print('error: ${failure.message}');
+      emit(DeleteTaskErrorState(failure));
+    }, (response) {
+      return {emit(DeleteTaskSuccessState(baseResponseEntity: response))};
+    });
+  }
+  
+  Future<void> markTaskAsDone(String taskId) async {
+        emit(MarkTaskAsDoneLoadingState());
+    (await _markTaskAsDoneUseCase.execute(taskId))
+        .fold((failure) {
+      print('error: ${failure.message}');
+      emit(MarkTaskAsDoneErrorState(failure));
+    }, (response) {
+      return {emit(MarkTaskAsDoneSuccessState(baseResponseEntity: response))};
     });
   }
 

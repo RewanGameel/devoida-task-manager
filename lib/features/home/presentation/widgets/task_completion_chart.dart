@@ -15,9 +15,6 @@ class TaskCompletionChart extends StatelessWidget {
   Widget build(BuildContext context) {
     final completedTasks = tasks.where((task) => task.isDone).length;
     final pendingTasks = tasks.length - completedTasks;
- // final completedTasks = 7;
- //    final pendingTasks =3;
-
    if(tasks.isEmpty) {
      return  Center(child: Padding(
        padding: getPadding(vertical: AppPadding.p24),

@@ -4,6 +4,7 @@ class ProjectEntity{
    String description;
    String createdAt;
    String updatedAt;
+   String deadlineDate;
   List<String> members;
   
   ProjectEntity({
@@ -12,6 +13,7 @@ class ProjectEntity{
     required this.description,
     required this.createdAt,
     required this.updatedAt,
+    required this.deadlineDate,
     required this.members,
   });
   
@@ -22,6 +24,7 @@ class ProjectEntity{
         description: json["description"]as String,
         createdAt: json["createdAt"]as String,
         updatedAt: json["updatedAt"]as String,
+        deadlineDate: json["deadlineDate"]as String,
         members: json["members"] as List<String>,
     );
 
@@ -31,6 +34,7 @@ class ProjectEntity{
         "description": description,
         "createdAt": createdAt,
         "updatedAt": updatedAt,
+        "deadlineDate": deadlineDate,
         "members": members,
     };
 }

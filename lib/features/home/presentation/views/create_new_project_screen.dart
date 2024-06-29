@@ -78,43 +78,51 @@ class _CreateNewProjectScreenState extends State<CreateNewProjectScreen> {
               title: "Create New Project",
             ),
             backgroundColor: ColorManager.backgroundDark,
-            body: _isLoading ?  const Center(
-                              child: SizedBox(
-                                  width: 16,
-                                  height: 16,
-                                  child: CircularProgressIndicator.adaptive(
-                                    strokeWidth: 2,
-                                  )),
-                            ) : SingleChildScrollView(
-              child: Padding(
-                padding: getPadding(horizontal: AppPadding.p24, vertical: AppPadding.p16),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextFieldWithTitle(fNameController: _nameController, fieldName: "Project Name", hintText: "Pick a name for your project.."),
-                      TextFieldWithTitle(
-                        fNameController: _descriptionController,
-                        fieldName: "Project Description",
-                        hintText: "Add a brief description about your project..",
-                        maxLines: 5,
+            body: _isLoading
+                ? const Center(
+                    child: SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator.adaptive(
+                          strokeWidth: 2,
+                        )),
+                  )
+                : SingleChildScrollView(
+                    child: Padding(
+                      padding: getPadding(horizontal: AppPadding.p24, vertical: AppPadding.p16),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextFieldWithTitle(fNameController: _nameController, fieldName: "Project Name", hintText: "Pick a name for your project.."),
+                            TextFieldWithTitle(
+                              fNameController: _descriptionController,
+                              fieldName: "Project Description",
+                              hintText: "Add a brief description about your project..",
+                              maxLines: 5,
+                            ),
+                            ...buildDeadlineSelectionWidget(),
+                            ...buildMembersDropDownList(),
+                            CustomButton(
+                              labelText: "Create",
+                              onPress: () {
+                                if (_formKey.currentState!.validate()) {
+                                  _viewModel.createProject(ProjectInputModel(
+                                    name: _nameController.text,
+                                    id: DateTime.now().toTimestamp().toString(),
+                                    description: _descriptionController.text,
+                                    members: selectedMembersList,
+                                    deadlineDate: selectedDateTime.toString(),
+                                  ));
+                                }
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                      ...buildDeadlineSelectionWidget(),
-                      ...buildMembersDropDownList(),
-                      CustomButton(
-                        labelText: "Create",
-                        onPress: () {
-                          if (_formKey.currentState!.validate()) {
-                            _viewModel.createProject(ProjectInputModel(name: _nameController.text, id: "56dsfdsf", description: _descriptionController.text, members: selectedMembersList));
-                          }
-                        },
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            ),
           );
         },
       ),

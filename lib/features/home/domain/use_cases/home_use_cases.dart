@@ -28,6 +28,7 @@ class ProjectsUseCases{
             ? (e['members'] as List).map((m) => m.toString()).toList()
             : [],
       'createdAt': e['createdAt'].toString().toDateTime().toString(),
+      'deadlineDate': e['deadlineDate'].toString().toDateTime().toString(),
       'updatedAt': e['updatedAt'].toString().toDateTime().toString(),
     })).toList();
       return Right(projectEntities);
@@ -42,7 +43,7 @@ class CreateProjectUseCase implements BaseUseCase<ProjectInputModel,BaseResponse
   @override
   Future<Either<Failure, BaseResponseEntity>> execute(ProjectInputModel inputModel)async {
      try {
-    final projects = await _databaseServices.addProjectToFireStoreDB(inputModel);
+     await _databaseServices.addProjectToFireStoreDB(inputModel);
       return Right(BaseResponseEntity(message: "Project Added Successfully", code: 200, status: true,id: 1));
    } catch (e) {
     return Left(Failure(message: e.toString(), code: 400));
@@ -101,6 +102,36 @@ class GetProjectTaskUseCases implements BaseUseCase<String,List<TaskEntity>>{
       'deadlineDate': e['deadlineDate'].toString().toDateTime().toString(),
     })).toList();
       return Right(projectTasks);
+   } catch (e) {
+    return Left(Failure(message: e.toString(), code: 400));
+   }
+    
+  }
+}
+
+class DeleteTaskUseCase implements BaseUseCase<String,BaseResponseEntity>{
+    final DatabaseServices _databaseServices = DatabaseServices();
+
+  @override
+  Future<Either<Failure, BaseResponseEntity>> execute(String taskId)async {
+     try {
+    await _databaseServices.deleteTaskFromFireStoreDB(taskId);
+      return Right(BaseResponseEntity(message: "Task Deleted Successfully", code: 200, status: true,id: 1));
+   } catch (e) {
+    return Left(Failure(message: e.toString(), code: 400));
+   }
+    
+  }
+}
+
+class MarkTaskAsDoneUseCase implements BaseUseCase<String,BaseResponseEntity>{
+    final DatabaseServices _databaseServices = DatabaseServices();
+
+  @override
+  Future<Either<Failure, BaseResponseEntity>> execute(String taskId)async {
+     try {
+    await _databaseServices.markTaskAsCompletedInFireStoreDB(taskId);
+      return Right(BaseResponseEntity(message: "Task Completed Successfully", code: 200, status: true,id: 1));
    } catch (e) {
     return Left(Failure(message: e.toString(), code: 400));
    }
