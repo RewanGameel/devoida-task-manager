@@ -16,7 +16,7 @@ class CustomButton extends StatelessWidget {
   final Color? textColor;
   final Color? borderColor;
   final Widget? rightIcon;
-  final Widget? liftIcon;
+  final Widget? leftIcon;
   final double? radiusValue;
 
   CustomButton({
@@ -29,7 +29,7 @@ class CustomButton extends StatelessWidget {
     this.textColor,
     this.borderColor,
     this.rightIcon,
-    this.liftIcon,
+    this.leftIcon,
     this.radiusValue = AppSize.s4,
   }) : super(key: key);
 
@@ -55,18 +55,18 @@ class CustomButton extends StatelessWidget {
                     : (isFilledColor ? Colors.transparent : ColorManager.textHeaderColor),
           ),
         ),
-        color: isFilledColor ? color ?? (ColorManager.primary) : ColorManager.white,
+        color: isFilledColor ? color ?? (ColorManager.primary) : ColorManager.textHeaderColor,
         elevation: 0,
         //button size is between 45 to 65 according to the human ergonomics
         height: AppSize.s44,
 
         child: Center(
-          child: rightIcon != null || liftIcon != null
+          child: rightIcon != null || leftIcon != null
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (liftIcon != null) ...[
-                      liftIcon!,
+                    if (leftIcon != null) ...[
+                      leftIcon!,
                       const SizedBox(width: AppSize.s8),
                     ],
                     Text(labelText, textAlign: TextAlign.center, overflow: TextOverflow.ellipsis, maxLines: 1, style: getMediumStyle(color: textColor ?? (isFilledColor ? ColorManager.white : ColorManager.primary), fontSize: fontSize ?? FontSize.s16)),

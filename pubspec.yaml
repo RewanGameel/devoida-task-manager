@@ -55,6 +55,7 @@ dependencies:
   firebase_app_check: ^0.3.0+2
   cloud_firestore: ^5.0.2
   flutter_datetime_picker_plus: ^2.0.1
+  syncfusion_flutter_charts: ^26.1.39
   intl: ^0.18.1
 
   flutter:

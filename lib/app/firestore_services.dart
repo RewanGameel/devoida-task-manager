@@ -3,6 +3,7 @@ import 'package:devoida_task_manager/app/constants.dart';
 import 'package:devoida_task_manager/features/home/presentation/models/project_input_model.dart';
 
 import '../features/home/domain/entities/project_entity.dart';
+import '../features/home/presentation/models/task_input_model.dart';
 
 class DatabaseServices {
     final FirebaseFirestore _fireStoreDB = FirebaseFirestore.instance;
@@ -13,7 +14,6 @@ class DatabaseServices {
     }
       Future<List<DocumentSnapshot>> getProjects() async {
     final querySnapshot = await _fireStoreDB.collection(Constants.PROJECTS_COLLECTION_KEY).orderBy('createdAt', descending: true).get();
-    print('querySnapshot.docs.first.id: ${querySnapshot.docs.first.id}');
     return querySnapshot.docs;
     
   }
@@ -24,4 +24,14 @@ class DatabaseServices {
     Future<void> deleteProjectFromFireStoreDB (String id) async {
         await _fireStoreDB.collection(Constants.PROJECTS_COLLECTION_KEY).doc(id).delete();
     }
+    
+       Future<void> addTaskToFireStoreDB (TaskInputModel inputModel) async {
+        await _fireStoreDB.collection(Constants.TASKS_COLLECTION_KEY).add(inputModel.toJson());
+    }
+    
+         Future<List<DocumentSnapshot>> getProjectTasksFromFireStoreDB (String projectId) async {
+         final querySnapshot = await _fireStoreDB.collection(Constants.TASKS_COLLECTION_KEY).where('projectId', isEqualTo: projectId).get(); 
+       return querySnapshot.docs;
+    }
+    
 }

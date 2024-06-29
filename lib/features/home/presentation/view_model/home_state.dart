@@ -31,3 +31,44 @@ class AddProjectErrorState extends HomeState {
   final Failure failure;
   AddProjectErrorState(this.failure);
 }
+
+
+//ADD NEW TASK STATES
+class AddTaskLoadingState extends HomeState {}
+
+class AddTaskSuccessState extends HomeState {
+  final BaseResponseEntity baseResponseEntity;
+  AddTaskSuccessState({required this.baseResponseEntity});
+}
+
+class AddTaskErrorState extends HomeState {
+  final Failure failure;
+  AddTaskErrorState(this.failure);
+}
+
+
+//DELETE PROJECT STATES
+class DeleteProjectLoadingState extends HomeState {}
+
+class DeleteProjectSuccessState extends HomeState {
+  final BaseResponseEntity baseResponseEntity;
+  DeleteProjectSuccessState({required this.baseResponseEntity});
+}
+
+class DeleteProjectErrorState extends HomeState {
+  final Failure failure;
+  DeleteProjectErrorState(this.failure);
+}
+
+//GET PROJECT TASKS STATES
+class GetProjectTasksLoadingState extends HomeState {}
+
+class GetProjectTasksSuccessState extends HomeState {
+  final List<TaskEntity> projectTasksEntity;
+  GetProjectTasksSuccessState({required this.projectTasksEntity});
+}
+
+class GetProjectTasksErrorState extends HomeState {
+  final Failure failure;
+  GetProjectTasksErrorState(this.failure);
+}

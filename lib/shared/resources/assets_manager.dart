@@ -56,4 +56,20 @@ class Assets {
   /// Assets for assetsSvgCalendar
   /// assets/svg/calendar.svg
   static const String assetsSvgCalendar = "assets/svg/calendar.svg";
+  
+  /// Assets for assetsSvgTrash
+  /// assets/svg/trash.svg
+  static const String assetsSvgTrash = "assets/svg/trash.svg"; 
+  
+    /// Assets for assetsSvgEmptyList
+  /// assets/svg/emptyList.svg
+  static const String assetsSvgEmptyList = "assets/svg/emptyList.svg"; 
+  
+  /// Assets for assetsSvgNewTask
+  /// assets/svg/new_task.svg
+  static const String assetsSvgNewTask = "assets/svg/new_task.svg";
+  
+  /// Assets for assetsSvgAnalytics
+  /// assets/svg/analytics.svg
+  static const String assetsSvgAnalytics = "assets/svg/analytics.svg";
 }

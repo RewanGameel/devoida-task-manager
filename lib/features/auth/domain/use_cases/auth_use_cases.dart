@@ -1,17 +1,27 @@
  
 import 'dart:ffi';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:devoida_task_manager/app/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../../app/error/failure.dart';
 
 class AuthUseCases {
   final _auth = FirebaseAuth.instance;
+    final FirebaseFirestore _fireStoreDB = FirebaseFirestore.instance;
 
   Future<Either<Failure, User>> createUserWithEmailAndPassword({required String email, required String password, required String userName}) async {
     try {
       final UserCredential createdUser = await _auth.createUserWithEmailAndPassword(email: email, password: password);
+       // Store user details in Firestore
+    await _fireStoreDB.collection(Constants.USERS_COLLECTION_KEY).doc(createdUser.user?.uid).set({
+      'uid': createdUser.user?.uid,
+      'email': email,
+      'name': userName,
+      'createdAt': FieldValue.serverTimestamp(),
+    });
       return Right(createdUser.user!);
     } catch (e) {
       String errorMessage;

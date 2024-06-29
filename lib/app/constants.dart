@@ -8,6 +8,7 @@ class Constants {
   //FIRESTORE COLLECTION KEYS
   static const String PROJECTS_COLLECTION_KEY = 'projects';
   static const String TASKS_COLLECTION_KEY = 'tasks';
+  static const String USERS_COLLECTION_KEY = 'users';
 
   static String empty = '';
   static bool isEmpty = false;

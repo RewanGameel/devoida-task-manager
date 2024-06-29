@@ -93,6 +93,20 @@ class _HomeScreenState extends State<HomeScreen> {
                               },
                               child: CustomSvgImage(imageName: Assets.assetsSvgDrawerIcon)),
                           const Spacer(),
+                              InkWell(
+                            onTap: () {
+                              _viewModel.getProjects();
+                            },
+                            child: const SizedBox(
+                              height: 32,
+                              width: 32,
+                              child: Icon(
+                                Icons.refresh,
+                                color: ColorManager.primary,
+                              ),
+                            ),
+                          ),
+                         const SizedBox(width: AppPadding.p8,),
                           InkWell(
                             onTap: () {
                               print('profile screen');
@@ -106,22 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                _isLoading=true;
-                              });
-                              _viewModel.getProjects();
-                            },
-                            child: const SizedBox(
-                              height: 32,
-                              width: 32,
-                              child: Icon(
-                                Icons.refresh,
-                                color: ColorManager.primary,
-                              ),
-                            ),
-                          ),
+                      
                         ],
                       ),
                       Column(

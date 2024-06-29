@@ -4,6 +4,8 @@ import 'dart:ffi';
 import 'package:dartz/dartz.dart';
 import 'package:devoida_task_manager/app/base_usecase.dart';
 import 'package:devoida_task_manager/app/extensions.dart';
+import 'package:devoida_task_manager/features/home/domain/entities/task_entity.dart';
+import 'package:devoida_task_manager/features/home/presentation/models/task_input_model.dart';
 
 import '../../../../app/error/failure.dart';
 import '../../../../app/firestore_services.dart';
@@ -48,6 +50,23 @@ class CreateProjectUseCase implements BaseUseCase<ProjectInputModel,BaseResponse
     
   }
 }
+
+class CreateTaskUseCase implements BaseUseCase<TaskInputModel,BaseResponseEntity>{
+    final DatabaseServices _databaseServices = DatabaseServices();
+
+  @override
+  Future<Either<Failure, BaseResponseEntity>> execute(TaskInputModel inputModel)async {
+     try {
+     await _databaseServices.addTaskToFireStoreDB(inputModel);
+      return Right(BaseResponseEntity(message: "Task Added Successfully", code: 200, status: true,id: 1));
+   } catch (e) {
+    return Left(Failure(message: e.toString(), code: 400));
+   }
+    
+  }
+}
+
+
 class DeleteProjectUseCase implements BaseUseCase<String,BaseResponseEntity>{
     final DatabaseServices _databaseServices = DatabaseServices();
 
@@ -63,4 +82,28 @@ class DeleteProjectUseCase implements BaseUseCase<String,BaseResponseEntity>{
   }
 }
 
-class TaskUseCases{}
+class GetProjectTaskUseCases implements BaseUseCase<String,List<TaskEntity>>{
+
+  final DatabaseServices _databaseServices = DatabaseServices();
+  @override
+  Future<Either<Failure, List<TaskEntity>>> execute(String projectId)async{
+    try {
+    final tasks = await _databaseServices.getProjectTasksFromFireStoreDB(projectId);
+    final List<TaskEntity> projectTasks = tasks.map((e) => TaskEntity.fromJson({
+      'id': e.id.toString(),
+      'name': e['name'].toString(),
+      'description': e['description'].toString(),
+      'projectId': e['projectId'].toString(),
+      'assignee': e['assignee'].toString(),
+      'isDone': e['isDone'] as bool,
+      'createdAt': e['createdAt'].toString().toDateTime().toString(),
+      'updatedAt': e['updatedAt'].toString().toDateTime().toString(),
+      'deadlineDate': e['deadlineDate'].toString().toDateTime().toString(),
+    })).toList();
+      return Right(projectTasks);
+   } catch (e) {
+    return Left(Failure(message: e.toString(), code: 400));
+   }
+    
+  }
+}
