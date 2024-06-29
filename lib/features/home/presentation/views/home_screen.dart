@@ -263,8 +263,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               )),
                           const Spacer(),
                           InkWell(
-                            onTap: () {
-                              Navigator.pushNamed(context, Routes.projectDetailsRoute, arguments:{'projectEntity': projectsList[index]});
+                            onTap: ()async {
+                            var result = await  Navigator.pushNamed(context, Routes.projectDetailsRoute, arguments:{'projectEntity': projectsList[index]});
+                            if(result==true)
+                              {
+                                _viewModel.getProjects();
+                              }
                             },
                             child: Container(
                                 decoration: BoxDecoration(

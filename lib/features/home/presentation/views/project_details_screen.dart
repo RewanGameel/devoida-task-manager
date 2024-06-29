@@ -62,7 +62,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
           if (state is DeleteProjectSuccessState) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.baseResponseEntity.message)));
             dismissDialog(context);
-            Navigator.pop(context);
+            Navigator.pop(context,true);
           }
           if (state is DeleteProjectErrorState) {
             dismissDialog(context);
