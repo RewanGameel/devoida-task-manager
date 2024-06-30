@@ -48,7 +48,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) {
+      create: (context) {                                                                
         _viewModel = HomeCubit();
         _viewModel.getProjectTasks(widget.projectEntity.id);
         calculateDeadline();
@@ -107,6 +107,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                       builder: (context) {
                         return ProjectActionBottomSheet(
                           projectId: widget.projectEntity.id,
+                          projectEntity: widget.projectEntity,
                           viewModel: _viewModel,
                         );
                       });
@@ -298,9 +299,17 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                 disableIcon: true,
                 title: "No Tasks Yet",
                 description: "You don't have any projects yet, Get productive create a new one with ease now!",
-                actionWidget: Text(
-                  "+ Create New Task",
-                  style: getRegularStyle(color: ColorManager.primary),
+                actionWidget: InkWell(
+                  onTap: ()async{
+                    var result = await Navigator.pushNamed(context,Routes.createNewTaskRoute,arguments: {'projectId': widget.projectEntity.id,'projectEntity': widget.projectEntity});
+                    if(result == true){
+                      _viewModel.getProjectTasks(widget.projectEntity.id,);
+                    }
+                  },
+                  child: Text(
+                    "+ Create New Task",
+                    style: getRegularStyle(color: ColorManager.primary),
+                  ),
                 ),
               ),
       const SizedBox(

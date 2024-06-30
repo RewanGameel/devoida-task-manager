@@ -51,6 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
           if (state is LoginUserSuccessState) {
             _isLoading = false;
             Singleton().user = state.userEntity;
+            print('user Id: ${Singleton().user!.uid}');
             Navigator.pushReplacementNamed(context, Routes.homeRoute);
           }
           if (state is LoginUserErrorState) {

@@ -30,7 +30,7 @@ class DatabaseServices {
     }
     
          Future<List<DocumentSnapshot>> getProjectTasksFromFireStoreDB (String projectId) async {
-         final querySnapshot = await _fireStoreDB.collection(Constants.TASKS_COLLECTION_KEY).where('projectId', isEqualTo: projectId).get(); 
+         final querySnapshot = await _fireStoreDB.collection(Constants.TASKS_COLLECTION_KEY).where('projectId', isEqualTo: projectId).orderBy('createdAt', descending: true).get(); 
        return querySnapshot.docs;
     }         
     
@@ -43,5 +43,11 @@ class DatabaseServices {
             'isDone': true
           });
     }
+    
+          Future<List<DocumentSnapshot>> getUsers() async {
+    final querySnapshot = await _fireStoreDB.collection(Constants.USERS_COLLECTION_KEY).orderBy('createdAt', descending: true).get();
+    return querySnapshot.docs;
+    
+  }
     
 }

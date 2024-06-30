@@ -9,9 +9,12 @@ import 'package:devoida_task_manager/shared/resources/routes_manager.dart';
 import 'package:devoida_task_manager/shared/resources/styles_manager.dart';
 import 'package:flutter/material.dart';
 
+import '../../domain/entities/project_entity.dart';
+
 class ProjectActionBottomSheet extends StatelessWidget {
-  const ProjectActionBottomSheet({super.key,required this.projectId,required this.viewModel});
+  const ProjectActionBottomSheet({super.key,required this.projectId,required this.viewModel,required this.projectEntity});
   final String projectId;
+  final ProjectEntity projectEntity;
   final HomeCubit viewModel;
 
   @override
@@ -76,7 +79,7 @@ class ProjectActionBottomSheet extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: CustomButton(
             onPress: () async{
-           var result = await  Navigator.pushNamed(context, Routes.createNewTaskRoute, arguments: {'projectId': projectId,});
+           var result = await  Navigator.pushNamed(context, Routes.createNewTaskRoute, arguments: {'projectId': projectId,'projectEntity':projectEntity});
            if(result==true){
             Navigator.pop(context, true);
            }

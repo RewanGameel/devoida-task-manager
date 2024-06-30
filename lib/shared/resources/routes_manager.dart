@@ -66,10 +66,12 @@ class RouteGenerator {
       case Routes.createNewTaskRoute:
         var arguments = settings.arguments != null ? settings.arguments as Map : null;
         String? projectId;
+        ProjectEntity? projectEntity;
         if (arguments != null) {
+          projectEntity = arguments['projectEntity'];
           projectId = arguments['projectId'];
         }
-        return MaterialPageRoute(builder: (_) => CreateNewTaskScreen(projectId: projectId!));
+        return MaterialPageRoute(builder: (_) => CreateNewTaskScreen(projectId: projectId!,projectEntity: projectEntity!,));
 
       default:
         return unDefinedRoute();

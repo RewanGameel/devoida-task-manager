@@ -1,4 +1,5 @@
 import 'package:devoida_task_manager/app/service_locator.dart';
+import 'package:devoida_task_manager/features/home/domain/entities/project_entity.dart';
 import 'package:devoida_task_manager/shared/common/widget/button_widget.dart';
 import 'package:devoida_task_manager/shared/common/widget/custom_app_bar.dart';
 import 'package:devoida_task_manager/shared/common/widget/text_field_with_title_widget.dart';
@@ -6,6 +7,7 @@ import 'package:devoida_task_manager/shared/resources/color_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import '../../domain/entities/user_entity.dart';
 import '../models/project_input_model.dart';
 import '../models/task_input_model.dart';
 import '../view_model/home_cubit.dart';
@@ -22,9 +24,10 @@ import '../../../../shared/resources/styles_manager.dart';
 import '../widgets/member_tag_widget.dart';
 
 class CreateNewTaskScreen extends StatefulWidget {
-  const CreateNewTaskScreen({super.key, required this.projectId,});
+  const CreateNewTaskScreen({super.key, required this.projectId,required this.projectEntity});
 
   final String projectId;
+  final ProjectEntity projectEntity;
 
   @override
   State<CreateNewTaskScreen> createState() => _CreateNewTaskScreenState();
@@ -36,8 +39,8 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
   final TextEditingController _descriptionController = TextEditingController();
 
   //TODO THIS IS A STATIC USERS LIST, SHOULD RETRIEVE FROM DB
-  List<String> membersList = ["Rewan Gameel", "dZ5xDI2kkyyy6ml0A1Dy", "Test Member"];
-  String? _selectedAssignee;
+  List<UserEntity> usersList = [];
+  UserEntity? _selectedAssignee;
   var selectedDateTime;
 
   late HomeCubit _viewModel;
@@ -61,6 +64,7 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
     return BlocProvider(
       create: (context) {
         _viewModel = HomeCubit();
+        _viewModel.getUsers();
         return _viewModel;
       },
       child: BlocConsumer<HomeCubit, HomeState>(
@@ -75,6 +79,17 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
           }
           if (state is AddTaskErrorState) {
             _isLoading = false;
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.failure.message)));
+          }
+           if (state is AddProjectErrorState) {
+            _isLoading = false;
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.failure.message)));
+          }
+          if (state is GetUsersSuccessState) {
+            //Show Project members Only
+            usersList = state.usersEntityList.where((user) => widget.projectEntity.members.contains(user.id)).toList();
+          }
+          if (state is GetUsersErrorState) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.failure.message)));
           }
         },
@@ -124,7 +139,7 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
                                   _viewModel.createTask(TaskInputModel(
                                     name: _nameController.text,
                                     description: _descriptionController.text,
-                                    assignee: _selectedAssignee!,
+                                    assignee: _selectedAssignee?.id ?? "0",
                                     projectId: widget.projectId,
                                     deadlineDate: selectedDateTime.toString(),
                                   ));
@@ -154,10 +169,13 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
       GestureDetector(
         onTap: () {
           DatePicker.showDatePicker(context, showTitleActions: true, theme: picker_theme.DatePickerTheme(doneStyle: getRegularStyle(color: ColorManager.primary)), onConfirm: (date) {
+           
             setState(() {
               selectedDateTime = date;
             });
-          }, currentTime: selectedDateTime != null && selectedDateTime.toString().isNotEmpty ? DateTime.parse(selectedDateTime.toString()) : DateTime.now(), locale: LocaleType.en);
+          }, 
+              maxTime:DateTime.parse(widget.projectEntity.deadlineDate),
+              currentTime: selectedDateTime != null && selectedDateTime.toString().isNotEmpty ? DateTime.parse(selectedDateTime.toString()) : DateTime.now(), locale: LocaleType.en);
         },
         child: Container(
           padding: getPadding(horizontal: AppPadding.p16, vertical: AppPadding.p12),
@@ -212,7 +230,7 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: CustomDropdown<String>(
+              child: CustomDropdown<UserEntity>(
                 isExpanded: true,
                 dropdownButtonStyle: DropdownButtonStyle(
                   elevation: 1,
@@ -231,17 +249,17 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
-                items: membersList != null
-                    ? membersList!
+                items: usersList != null
+                    ? usersList!
                         .asMap()
                         .entries
                         .map(
-                          (item) => DropdownItem<String>(
+                          (item) => DropdownItem<UserEntity>(
                             value: item.value,
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                item.value,
+                                item.value.name,
                                 style: getRegularStyle(),
                               ),
                             ),
@@ -251,7 +269,7 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
                     : [],
                 onChange: (int index) {
                   setState(() {
-                    _selectedAssignee = membersList![index];
+                    _selectedAssignee = usersList![index];
                   });
                 },
                 child: ClipRRect(
@@ -278,7 +296,7 @@ class _CreateNewTaskScreenState extends State<CreateNewTaskScreen> {
       _selectedAssignee == null
           ? const SizedBox.shrink()
           : TagWidget(
-              name: _selectedAssignee!,
+              name: _selectedAssignee?.name ?? "",
               onPress: () {
                 setState(() {
                   _selectedAssignee = null;

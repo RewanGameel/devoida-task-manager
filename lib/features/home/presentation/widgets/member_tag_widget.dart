@@ -24,6 +24,8 @@ class _TagWidgetState extends State<TagWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.only(
+          right: AppPadding.p8),
       padding: const EdgeInsets.symmetric(
           horizontal: AppPadding.p12, vertical: AppPadding.p8),
       decoration: BoxDecoration(

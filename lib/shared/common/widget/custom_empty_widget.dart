@@ -10,7 +10,6 @@ import 'custom_image_widget.dart';
 
 enum EmptyScreenTypes {
   emptyList,
-  emptySearch,
   emptyScreen,
   genericError,
 }
@@ -32,8 +31,8 @@ class CustomEmptyScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        if (emptyScreenTypes != null) CustomSvgImage(imageName: emptyScreenTypes == EmptyScreenTypes.emptyList ? Assets.assetsSvgErrorScreen : Assets.assetsSvgErrorScreen, width: 150,)
-       else disableIcon==true ? SizedBox.shrink(): Container(
+        if (emptyScreenTypes != null) CustomSvgImage(imageName: emptyScreenTypes == EmptyScreenTypes.emptyList ? Assets.assetsSvgEmptyScreen : Assets.assetsSvgErrorScreen, width: 150,)
+       else disableIcon==true ? const SizedBox.shrink(): Container(
           height: AppSize.s80,
           width: AppSize.s80,
           margin: const EdgeInsets.all(AppPadding.p8),
@@ -63,7 +62,7 @@ class CustomEmptyScreen extends StatelessWidget {
             style: getRegularStyle(fontSize: FontSize.s14),
           ),
         ),
-        actionWidget ?? SizedBox(),
+        actionWidget ?? const SizedBox(),
       ],
     );
   }

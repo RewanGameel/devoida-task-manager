@@ -4,7 +4,9 @@ import 'dart:ffi';
 import 'package:dartz/dartz.dart';
 import 'package:devoida_task_manager/app/base_usecase.dart';
 import 'package:devoida_task_manager/app/extensions.dart';
+import 'package:devoida_task_manager/app/singlton.dart';
 import 'package:devoida_task_manager/features/home/domain/entities/task_entity.dart';
+import 'package:devoida_task_manager/features/home/domain/entities/user_entity.dart';
 import 'package:devoida_task_manager/features/home/presentation/models/task_input_model.dart';
 
 import '../../../../app/error/failure.dart';
@@ -31,7 +33,7 @@ class ProjectsUseCases{
       'deadlineDate': e['deadlineDate'].toString().toDateTime().toString(),
       'updatedAt': e['updatedAt'].toString().toDateTime().toString(),
     })).toList();
-      return Right(projectEntities);
+      return Right(projectEntities.where((project) => project.members.contains(Singleton().user?.uid)).toList());
    } catch (e) {
     return Left(Failure(message: e.toString(), code: 400));
    }
@@ -51,7 +53,6 @@ class CreateProjectUseCase implements BaseUseCase<ProjectInputModel,BaseResponse
     
   }
 }
-
 class CreateTaskUseCase implements BaseUseCase<TaskInputModel,BaseResponseEntity>{
     final DatabaseServices _databaseServices = DatabaseServices();
 
@@ -66,8 +67,6 @@ class CreateTaskUseCase implements BaseUseCase<TaskInputModel,BaseResponseEntity
     
   }
 }
-
-
 class DeleteProjectUseCase implements BaseUseCase<String,BaseResponseEntity>{
     final DatabaseServices _databaseServices = DatabaseServices();
 
@@ -82,7 +81,6 @@ class DeleteProjectUseCase implements BaseUseCase<String,BaseResponseEntity>{
     
   }
 }
-
 class GetProjectTaskUseCases implements BaseUseCase<String,List<TaskEntity>>{
 
   final DatabaseServices _databaseServices = DatabaseServices();
@@ -108,7 +106,6 @@ class GetProjectTaskUseCases implements BaseUseCase<String,List<TaskEntity>>{
     
   }
 }
-
 class DeleteTaskUseCase implements BaseUseCase<String,BaseResponseEntity>{
     final DatabaseServices _databaseServices = DatabaseServices();
 
@@ -123,7 +120,6 @@ class DeleteTaskUseCase implements BaseUseCase<String,BaseResponseEntity>{
     
   }
 }
-
 class MarkTaskAsDoneUseCase implements BaseUseCase<String,BaseResponseEntity>{
     final DatabaseServices _databaseServices = DatabaseServices();
 
@@ -132,6 +128,26 @@ class MarkTaskAsDoneUseCase implements BaseUseCase<String,BaseResponseEntity>{
      try {
     await _databaseServices.markTaskAsCompletedInFireStoreDB(taskId);
       return Right(BaseResponseEntity(message: "Task Completed Successfully", code: 200, status: true,id: 1));
+   } catch (e) {
+    return Left(Failure(message: e.toString(), code: 400));
+   }
+    
+  }
+}
+class GetUsersUseCase implements BaseUseCase<void,List<UserEntity>>{
+    final DatabaseServices _databaseServices = DatabaseServices();
+
+  @override
+  Future<Either<Failure, List<UserEntity>>> execute(Void)async {
+     try {
+    final users = await _databaseServices.getUsers();
+     List<UserEntity> usersList = users.map((e) => UserEntity.fromJson({
+       'id': e['uid'].toString(),
+       'name': e['name'].toString(),
+       'email': e['email'].toString(),
+       'createdAt':e['createdAt'].toString().toDateTime().toString(),
+     })).toList();
+      return Right(usersList);
    } catch (e) {
     return Left(Failure(message: e.toString(), code: 400));
    }

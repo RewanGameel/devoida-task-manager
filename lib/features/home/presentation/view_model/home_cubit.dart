@@ -1,7 +1,10 @@
+import 'dart:ffi';
+
 import 'package:bloc/bloc.dart';
 import 'package:devoida_task_manager/app/error/failure.dart';
 import 'package:devoida_task_manager/features/home/domain/entities/project_entity.dart';
 import 'package:devoida_task_manager/features/home/domain/entities/task_entity.dart';
+import 'package:devoida_task_manager/features/home/domain/entities/user_entity.dart';
 import 'package:devoida_task_manager/features/home/domain/use_cases/home_use_cases.dart';
 import 'package:devoida_task_manager/features/home/presentation/models/project_input_model.dart';
 import 'package:devoida_task_manager/features/home/presentation/models/task_input_model.dart';
@@ -22,6 +25,7 @@ class HomeCubit extends Cubit<HomeState> {
   final GetProjectTaskUseCases _getProjectTaskUseCases = locator<GetProjectTaskUseCases>();
   final DeleteTaskUseCase _deleteTaskUseCase = locator<DeleteTaskUseCase>();
   final MarkTaskAsDoneUseCase _markTaskAsDoneUseCase = locator<MarkTaskAsDoneUseCase>();
+  final GetUsersUseCase _getUsersUseCase = locator<GetUsersUseCase>();
 
   Future<void> getProjects() async {
         emit(GetProjectsLoadingState());
@@ -97,6 +101,18 @@ class HomeCubit extends Cubit<HomeState> {
       emit(MarkTaskAsDoneErrorState(failure));
     }, (response) {
       return {emit(MarkTaskAsDoneSuccessState(baseResponseEntity: response))};
+    });
+  }
+
+  
+    Future<void> getUsers() async {
+        emit(GetUsersLoadingState());
+    (await _getUsersUseCase.execute(Void))
+        .fold((failure) {
+      print('error: ${failure.message}');
+      emit(GetUsersErrorState(failure));
+    }, (users) {
+      return {emit(GetUsersSuccessState(usersEntityList: users))};
     });
   }
 

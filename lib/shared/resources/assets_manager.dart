@@ -1,10 +1,6 @@
 class Assets {
   Assets._();
-
-  /// Assets for assetsSoundsAlertSound
-  /// assets/sounds/alert_sound.wav
-  static const String assetsSoundsAlertSound = "sounds/alert_sound.wav";
-
+  
   /// Assets for assetsFontsCairoBlack
   /// assets/fonts/Cairo-Black.ttf
   static const String assetsFontsCairoBlack = "assets/fonts/Cairo-Black.ttf";
@@ -61,9 +57,9 @@ class Assets {
   /// assets/svg/trash.svg
   static const String assetsSvgTrash = "assets/svg/trash.svg"; 
   
-    /// Assets for assetsSvgEmptyList
-  /// assets/svg/emptyList.svg
-  static const String assetsSvgEmptyList = "assets/svg/emptyList.svg"; 
+    /// Assets for assetsSvgEmptyScreen
+  /// assets/svg/emptyScreen.svg
+  static const String assetsSvgEmptyScreen = "assets/svg/emptyScreen.svg"; 
   
   /// Assets for assetsSvgNewTask
   /// assets/svg/new_task.svg

@@ -80,7 +80,7 @@ class GetProjectTasksErrorState extends HomeState {
   GetProjectTasksErrorState(this.failure);
 }
 
-//DELETE PROJECT STATES
+//DELETE TASK STATES
 class DeleteTaskLoadingState extends HomeState {}
 
 class DeleteTaskSuccessState extends HomeState {
@@ -95,7 +95,7 @@ class DeleteTaskErrorState extends HomeState {
   DeleteTaskErrorState(this.failure);
 }
 
-//DELETE PROJECT STATES
+//MARK TASK AS DONE STATES
 class MarkTaskAsDoneLoadingState extends HomeState {}
 
 class MarkTaskAsDoneSuccessState extends HomeState {
@@ -108,4 +108,19 @@ class MarkTaskAsDoneErrorState extends HomeState {
   final Failure failure;
 
   MarkTaskAsDoneErrorState(this.failure);
+}
+
+//GET USERS/MEMBERS LIST
+class GetUsersLoadingState extends HomeState {}
+
+class GetUsersSuccessState extends HomeState {
+  final List<UserEntity> usersEntityList;
+
+  GetUsersSuccessState({required this.usersEntityList});
+}
+
+class GetUsersErrorState extends HomeState {
+  final Failure failure;
+
+  GetUsersErrorState(this.failure);
 }

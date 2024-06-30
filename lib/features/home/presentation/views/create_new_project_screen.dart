@@ -1,4 +1,5 @@
 import 'package:devoida_task_manager/app/service_locator.dart';
+import 'package:devoida_task_manager/features/home/domain/entities/user_entity.dart';
 import 'package:devoida_task_manager/shared/common/widget/button_widget.dart';
 import 'package:devoida_task_manager/shared/common/widget/custom_app_bar.dart';
 import 'package:devoida_task_manager/shared/common/widget/text_field_with_title_widget.dart';
@@ -32,7 +33,8 @@ class _CreateNewProjectScreenState extends State<CreateNewProjectScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   List<String> membersList = ["Rewan Gameel", "Jane Doe", "Test 1 member"];
-  List<String> selectedMembersList = [];
+  List<UserEntity> usersList = [];
+  List<UserEntity> selectedMembersList = [];
   var selectedDateTime;
 
   @override
@@ -55,6 +57,7 @@ class _CreateNewProjectScreenState extends State<CreateNewProjectScreen> {
     return BlocProvider(
       create: (context) {
         _viewModel = HomeCubit();
+        _viewModel.getUsers();
         return _viewModel;
       },
       child: BlocConsumer<HomeCubit, HomeState>(
@@ -69,6 +72,12 @@ class _CreateNewProjectScreenState extends State<CreateNewProjectScreen> {
           }
           if (state is AddProjectErrorState) {
             _isLoading = false;
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.failure.message)));
+          }
+          if (state is GetUsersSuccessState) {
+            usersList = state.usersEntityList;
+          }
+          if (state is GetUsersErrorState) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.failure.message)));
           }
         },
@@ -112,7 +121,7 @@ class _CreateNewProjectScreenState extends State<CreateNewProjectScreen> {
                                     name: _nameController.text,
                                     id: DateTime.now().toTimestamp().toString(),
                                     description: _descriptionController.text,
-                                    members: selectedMembersList,
+                                    members: selectedMembersList.map((e) => e.id).toList(),
                                     deadlineDate: selectedDateTime.toString(),
                                   ));
                                 }
@@ -199,7 +208,7 @@ class _CreateNewProjectScreenState extends State<CreateNewProjectScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: CustomDropdown<String>(
+              child: CustomDropdown<UserEntity>(
                 isExpanded: true,
                 dropdownButtonStyle: DropdownButtonStyle(
                   elevation: 1,
@@ -218,17 +227,17 @@ class _CreateNewProjectScreenState extends State<CreateNewProjectScreen> {
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
-                items: membersList != null
-                    ? membersList!
+                items: usersList != null
+                    ? usersList!
                         .asMap()
                         .entries
                         .map(
-                          (item) => DropdownItem<String>(
+                          (item) => DropdownItem<UserEntity>(
                             value: item.value,
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                item.value,
+                                item.value.name,
                                 style: getRegularStyle(),
                               ),
                             ),
@@ -238,10 +247,10 @@ class _CreateNewProjectScreenState extends State<CreateNewProjectScreen> {
                     : [],
                 onChange: (int index) {
                   setState(() {
-                    if (selectedMembersList.contains(membersList![index])) {
+                    if (selectedMembersList.contains(usersList![index])) {
                       return;
                     }
-                    selectedMembersList.add(membersList![index]);
+                    selectedMembersList.add(usersList![index]);
                   });
                 },
                 child: ClipRRect(
@@ -269,7 +278,7 @@ class _CreateNewProjectScreenState extends State<CreateNewProjectScreen> {
           runSpacing: AppPadding.p8,
           children: selectedMembersList
               .map((member) => TagWidget(
-                  name: member,
+                  name: member.name,
                   onPress: () {
                     setState(() {
                       selectedMembersList.remove(member);

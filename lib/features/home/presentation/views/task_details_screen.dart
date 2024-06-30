@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:devoida_task_manager/app/extensions.dart';
 import 'package:devoida_task_manager/app/service_locator.dart';
+import 'package:devoida_task_manager/app/singlton.dart';
 import 'package:devoida_task_manager/features/home/domain/entities/task_entity.dart';
 import 'package:devoida_task_manager/shared/common/widget/custom_app_bar.dart';
 import 'package:devoida_task_manager/shared/common/widget/custom_image_widget.dart';
@@ -73,7 +74,7 @@ class TaskDetailsScreen extends StatelessWidget {
         builder: (context, state) {
           return Scaffold(
             floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-            floatingActionButton: !taskEntity.isDone
+            floatingActionButton: !taskEntity.isDone && Singleton().user?.uid == taskEntity.assignee
                 ? Container(
                     padding: const EdgeInsets.symmetric(horizontal: AppPadding.p24, vertical: AppPadding.p16),
                     color: ColorManager.backgroundDark,
@@ -82,8 +83,9 @@ class TaskDetailsScreen extends StatelessWidget {
                       leftIcon: const Icon(Icons.check_circle_rounded, color: ColorManager.white),
                       labelText: "Mark As Done",
                       onPress: () async {
-                        //TODO call markAsDone
-                        _viewModel.markTaskAsDone(taskEntity.id);
+                        if(Singleton().user?.uid == taskEntity.assignee){
+                          _viewModel.markTaskAsDone(taskEntity.id);
+                        }
                       },
                     ),
                   )
@@ -96,6 +98,10 @@ class TaskDetailsScreen extends StatelessWidget {
               actions: [
                 InkWell(
                   onTap: () {
+                    // if(Singleton().user?.uid == taskEntity.assignee){
+                    //                       _viewModel.deleteTask(taskEntity.id);
+                    //
+                    // }
                     _viewModel.deleteTask(taskEntity.id);
                   },
                   child: Row(
