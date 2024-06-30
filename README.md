@@ -34,22 +34,20 @@ Dart 3.3.4
 * MyBlocObserver to easily observe any changes for Blocs.
 
 # Application ScreenShots 
-![Image 1](App%20screenshots/1.png)
-![Image 2](App%20screenshots/2.png)
-![Image 3](App%20screenshots/3.png)
-![Image 4](App%20screenshots/4.png)
-![Image 5](App%20screenshots/5.png)
-![Image 6](App%20screenshots/6.png)
-![Image 7](App%20screenshots/7.png)
-![Image 8](App%20screenshots/8.png)
-![Image 9](App%20screenshots/9.png)
-![Image 10](App%20screenshots/10.png)
-![Image 11](App%20screenshots/11.png)
-![Image 12](App%20screenshots/12.png)
-![Image 13](App%20screenshots/13.png)
-![Image 14](App%20screenshots/14.png)
-![Image 15](App%20screenshots/15.png)
-![Image 16](App%20screenshots/16.png)
-![Image 17](App%20screenshots/17.png)
-
-<img src="App%20screenshots/17.png" alt="Alt text" style="width:150px;">
+<img src="App%20screenshots/1.png" alt="Image 1" width="200">
+<img src="App%20screenshots/2.png" alt="Image 2" width="200">
+<img src="App%20screenshots/3.png" alt="Image 3" width="200">
+<img src="App%20screenshots/4.png" alt="Image 4" width="200">
+<img src="App%20screenshots/5.png" alt="Image 5" width="200">
+<img src="App%20screenshots/6.png" alt="Image 6" width="200">
+<img src="App%20screenshots/7.png" alt="Image 7" width="200">
+<img src="App%20screenshots/8.png" alt="Image 8" width="200">
+<img src="App%20screenshots/9.png" alt="Image 9" width="200">
+<img src="App%20screenshots/10.png" alt="Image 10" width="200">
+<img src="App%20screenshots/11.png" alt="Image 11" width="200">
+<img src="App%20screenshots/12.png" alt="Image 12" width="200">
+<img src="App%20screenshots/13.png" alt="Image 13" width="200">
+<img src="App%20screenshots/14.png" alt="Image 14" width="200">
+<img src="App%20screenshots/15.png" alt="Image 15" width="200">
+<img src="App%20screenshots/16.png" alt="Image 16" width="200">
+<img src="App%20screenshots/17.png" alt="Image 17" width="200">
