@@ -32,3 +32,18 @@ Dart 3.3.4
 * A validator file that validates inputs like phone numbers, emails, passwords, confirm password fields.
 * Asset folder that has sounds, JSON, SVGs, images folder.
 * MyBlocObserver to easily observe any changes for Blocs.
+
+# Application ScreenShots 
+![Image 1](App%20screenshots/1.png)
+![Image 2](App%20screenshots/2.png)
+![Image 3](App%20screenshots/3.png)
+![Image 4](App%20screenshots/4.png)
+![Image 5](App%20screenshots/5.png)
+![Image 6](App%20screenshots/6.png)
+![Image 7](App%20screenshots/7.png)
+![Image 8](App%20screenshots/8.png)
+![Image 9](App%20screenshots/9.png)
+![Image 10](App%20screenshots/10.png)
+![Image 11](App%20screenshots/11.png)
+![Image 12](App%20screenshots/12.png)
+![Image 13](App%20screenshots/13.png)
