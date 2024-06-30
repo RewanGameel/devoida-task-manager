@@ -31,12 +31,13 @@ class _HomeScreenState extends State<HomeScreen> {
   late HomeCubit _viewModel;
   bool _isLoading = true;
   List<ProjectEntity> projectsList = [];
+
   @override
   void initState() {
     initHomeModule();
     super.initState();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -58,6 +59,12 @@ class _HomeScreenState extends State<HomeScreen> {
           if (state is GetProjectsErrorState) {
             _isLoading = false;
           }
+          if (state is LogoutUserErrorState) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.failure.message)));
+          }
+          if (state is LogoutUserSuccessState) {
+            Singleton().clearData(context);
+          }
         },
         builder: (context, state) {
           return SafeArea(
@@ -73,12 +80,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   Icons.add,
                   color: ColorManager.primary,
                 ),
-                onPressed: () async{
-                 var result = await Navigator.pushNamed(context, Routes.createNewProjectRoute);
-                if(result == true){
-                  _viewModel.getProjects();
-                }
-                 },
+                onPressed: () async {
+                  var result = await Navigator.pushNamed(context, Routes.createNewProjectRoute);
+                  if (result == true) {
+                    _viewModel.getProjects();
+                  }
+                },
               ),
               body: Padding(
                 padding: getPadding(horizontal: AppPadding.p24, vertical: AppPadding.p16),
@@ -96,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               },
                               child: CustomSvgImage(imageName: Assets.assetsSvgDrawerIcon)),
                           const Spacer(),
-                              InkWell(
+                          InkWell(
                             onTap: () {
                               _viewModel.getProjects();
                             },
@@ -109,7 +116,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                         const SizedBox(width: AppPadding.p8,),
+                          const SizedBox(
+                            width: AppPadding.p8,
+                          ),
                           InkWell(
                             onTap: () {
                               print('profile screen');
@@ -123,7 +132,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                      
                         ],
                       ),
                       Column(
@@ -141,8 +149,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             )
                           else
                             ...buildProjectsSection(),
-                           const SizedBox(
-                                  height: AppPadding.p50,)
+                          const SizedBox(
+                            height: AppPadding.p50,
+                          )
                         ],
                       ),
                     ],
@@ -226,7 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                       projectsList[index].deadlineDate.toString().toFormattedDateYear(),
+                        projectsList[index].deadlineDate.toString().toFormattedDateYear(),
                         style: getHintStyle(color: ColorManager.contrastLight),
                       ),
                       Text(
@@ -263,10 +272,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               )),
                           const Spacer(),
                           InkWell(
-                            onTap: ()async {
-                            var result = await  Navigator.pushNamed(context, Routes.projectDetailsRoute, arguments:{'projectEntity': projectsList[index]});
-                            if(result==true)
-                              {
+                            onTap: () async {
+                              var result = await Navigator.pushNamed(context, Routes.projectDetailsRoute, arguments: {'projectEntity': projectsList[index]});
+                              if (result == true) {
                                 _viewModel.getProjects();
                               }
                             },
@@ -293,13 +301,12 @@ class _HomeScreenState extends State<HomeScreen> {
               description: "You don't have any projects yet, Get productive create a new one with ease now!",
               emptyScreenTypes: EmptyScreenTypes.emptyList,
               actionWidget: CustomButton(
-                onPress: ()async {
-                 var result =await  Navigator.pushNamed(context, Routes.createNewProjectRoute);
-                if(result==true)
-                  {
+                onPress: () async {
+                  var result = await Navigator.pushNamed(context, Routes.createNewProjectRoute);
+                  if (result == true) {
                     _viewModel.getProjects();
                   }
-                 },
+                },
                 labelText: "+ Create New Project",
               ),
             )
@@ -322,15 +329,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () => Navigator.pop(context),
                     child: Container(
                       padding: getPadding(horizontal: AppPadding.p16, vertical: AppPadding.p12),
+                      // margin: getPadding(horizontal: AppPadding.p16, vertical: AppPadding.p10),
                       decoration: BoxDecoration(
-                        color: ColorManager.white,
+                        color: ColorManager.neutralGray900,
                         borderRadius: BorderRadius.circular(AppPadding.p8),
-                        boxShadow: [BoxShadow(blurRadius: 10, spreadRadius: 2, color: const Color(0xffd3d1d8).withOpacity(0.22))],
                       ),
                       child: CustomSvgImage(
                         height: 12,
                         width: 12,
                         imageName: Assets.assetsSvgArrowBack,
+                        color: ColorManager.white,
                       ),
                     ))
               ],
@@ -397,7 +405,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       name: "Log Out",
                       isLogout: true,
                       onTap: () {
-                        Singleton().clearData(context);
+                        _viewModel.logoutUser();
                       }),
                 ],
               ),

@@ -2,6 +2,8 @@ import 'dart:ffi';
 
 import 'package:bloc/bloc.dart';
 import 'package:devoida_task_manager/app/error/failure.dart';
+import 'package:devoida_task_manager/features/auth/domain/use_cases/auth_use_cases.dart';
+import 'package:devoida_task_manager/features/auth/domain/use_cases/auth_use_cases.dart';
 import 'package:devoida_task_manager/features/home/domain/entities/project_entity.dart';
 import 'package:devoida_task_manager/features/home/domain/entities/task_entity.dart';
 import 'package:devoida_task_manager/features/home/domain/entities/user_entity.dart';
@@ -26,6 +28,7 @@ class HomeCubit extends Cubit<HomeState> {
   final DeleteTaskUseCase _deleteTaskUseCase = locator<DeleteTaskUseCase>();
   final MarkTaskAsDoneUseCase _markTaskAsDoneUseCase = locator<MarkTaskAsDoneUseCase>();
   final GetUsersUseCase _getUsersUseCase = locator<GetUsersUseCase>();
+  final AuthUseCases _logoutUserUseCase = locator<AuthUseCases>();
 
   Future<void> getProjects() async {
         emit(GetProjectsLoadingState());
@@ -113,6 +116,16 @@ class HomeCubit extends Cubit<HomeState> {
       emit(GetUsersErrorState(failure));
     }, (users) {
       return {emit(GetUsersSuccessState(usersEntityList: users))};
+    });
+  }
+  
+ Future<void> logoutUser() async {
+    emit(LogoutUserLoadingState());
+    (await _logoutUserUseCase.logoutUser())
+        .fold((failure) {
+      emit(LogoutUserErrorState(failure));
+    }, (response) {
+      return {emit(LogoutUserSuccessState())};
     });
   }
 

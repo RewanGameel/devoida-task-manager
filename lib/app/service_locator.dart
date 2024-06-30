@@ -64,6 +64,9 @@ initHomeModule() {
    if (!GetIt.I.isRegistered<MarkTaskAsDoneUseCase>()) {
     locator.registerFactory<MarkTaskAsDoneUseCase>(() => MarkTaskAsDoneUseCase());
   }   
+   if (!GetIt.I.isRegistered<AuthUseCases>()) {
+    locator.registerFactory<AuthUseCases>(() => AuthUseCases());
+  }   
    if (!GetIt.I.isRegistered<GetUsersUseCase>()) {
     locator.registerFactory<GetUsersUseCase>(() => GetUsersUseCase());
   }

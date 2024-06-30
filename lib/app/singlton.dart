@@ -26,14 +26,11 @@ class Singleton {
     return data.size.shortestSide >= 600;
   }
   void clearData(BuildContext context) {
-    //called on logout
-    locator<AppPreferences>().deleteDataToSharedPref(key: 'token');
-    locator<AppPreferences>().deleteDataToSharedPref(key: 'fcmToken');
-    Singleton().token = null;
-    Singleton().fcmToken = null;
-    Singleton().user = null;
-    // Navigator.pushNamedAndRemoveUntil(context, Routes.onBoardingRoute, (route) => false);
+    //called on logout Success
     Navigator.pushReplacementNamed(context, Routes.onBoardingRoute);
+    // Navigator.pushNamedAndRemoveUntil(context, Routes.onBoardingRoute, (route) => false);
+    Singleton().token = null;
+    Singleton().user = null;
     locator<AppPreferences>().clearDataFromSharedPref();
   }
   

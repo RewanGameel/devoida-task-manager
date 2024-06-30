@@ -82,16 +82,16 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   child: widget.leadingWidget ??
                     Container(
                       padding: getPadding(horizontal: AppPadding.p16, vertical: AppPadding.p12),
-                      margin: getPadding(horizontal: AppPadding.p16, vertical: AppPadding.p8),
+                      margin: getPadding(horizontal: AppPadding.p16, vertical: AppPadding.p10),
                       decoration: BoxDecoration(
-                        color: ColorManager.white,
+                        color: ColorManager.neutralGray900,
                         borderRadius: BorderRadius.circular(AppPadding.p8),
-                        boxShadow: [BoxShadow(blurRadius: 10, spreadRadius: 2, color: const Color(0xffd3d1d8).withOpacity(0.22))],
                       ),
                       child: CustomSvgImage(
                         height: 12,
                         width: 12,
                         imageName: Assets.assetsSvgArrowBack,
+                        color: Colors.white,
                       ),
                     ))
               : Container(
@@ -101,7 +101,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
           backgroundColor: Colors.transparent,
           leadingWidth: (widget.canGoBack ?? true)
               ? deviceScreenType == DeviceScreenType.Mobile
-                  ? 75
+                  ? 70
                   : deviceScreenType == DeviceScreenType.Tablet
                       ? 80
                       : 80

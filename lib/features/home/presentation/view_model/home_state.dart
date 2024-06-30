@@ -124,3 +124,16 @@ class GetUsersErrorState extends HomeState {
 
   GetUsersErrorState(this.failure);
 }
+
+//LOG USER OUT
+class LogoutUserLoadingState extends HomeState {}
+
+class LogoutUserSuccessState extends HomeState {
+  LogoutUserSuccessState();
+}
+
+class LogoutUserErrorState extends HomeState {
+  final Failure failure;
+
+  LogoutUserErrorState(this.failure);
+}
